@@ -12,12 +12,16 @@ pku_seg = pkuseg.pkuseg()
 # thulac
 import thulac
 thu_seg = thulac.thulac(seg_only=True)
+# pynlpir
+import pynlpir
+pynlpir.open()
 
 
 segmenter_map = {
     'jieba': jieba,
     'pkuseg': pku_seg,
-    'thulac': thu_seg
+    'thulac': thu_seg,
+    'pynlpir': pynlpir
 }
 
 def segmenter_by_key(seg_key, sent):
@@ -26,8 +30,12 @@ def segmenter_by_key(seg_key, sent):
     """
     segmenter = segmenter_map[seg_key]
     if seg_key == "thulac":
-        return segmenter.cut(sent, text=True).split()
-    return list(segmenter.cut(sent))
+        result = segmenter.cut(sent, text=True).split()
+    elif seg_key == "pynlpir":
+        result = segmenter.segment(sent, pos_tagging=False)
+    else:
+        result = segmenter.cut(sent)
+    return list(result)
 
 # compare segment result
 for sent in msg:
