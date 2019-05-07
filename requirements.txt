@@ -2,3 +2,4 @@ jieba
 pkuseg
 thulac
 pynlpir
+pyhanlp

@@ -15,13 +15,16 @@ thu_seg = thulac.thulac(seg_only=True)
 # pynlpir
 import pynlpir
 pynlpir.open()
+# pyhanlp
+from pyhanlp import HanLP
 
 
 segmenter_map = {
     'jieba': jieba,
     'pkuseg': pku_seg,
     'thulac': thu_seg,
-    'pynlpir': pynlpir
+    'pynlpir': pynlpir,
+    'pyhanlp': HanLP
 }
 
 def segmenter_by_key(seg_key, sent):
@@ -33,6 +36,8 @@ def segmenter_by_key(seg_key, sent):
         result = segmenter.cut(sent, text=True).split()
     elif seg_key == "pynlpir":
         result = segmenter.segment(sent, pos_tagging=False)
+    elif seg_key == 'pyhanlp':
+        result = [term.word for term in segmenter.segment(sent)]
     else:
         result = segmenter.cut(sent)
     return list(result)
@@ -41,7 +46,5 @@ def segmenter_by_key(seg_key, sent):
 for sent in msg:
     for seg_key in segmenter_map:
         words = segmenter_by_key(seg_key, sent)
-        print(seg_key+':'+' '.join(words))
+        print(seg_key+': '+' '.join(words))
     print()
-
-
